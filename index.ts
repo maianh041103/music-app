@@ -1,13 +1,13 @@
-import express, { Express, Request, Response, Router } from "express";
-
-const route: Router = express.Router();
+import express, { Express, Request, Response } from "express";
 
 const app: Express = express();
-
 const port = 3000;
 
+app.set('views', './view');
+app.set('view engine', 'pug');
+
 app.get("/topics", async (req: Request, res: Response): Promise<void> => {
-  res.send("Chủ đề bài hát");
+  res.render('client/pages/topics/index.pug');
 });
 
 app.listen(port, () => {
