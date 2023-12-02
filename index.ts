@@ -18,6 +18,10 @@ app.set('views', './views');
 app.set('view engine', 'pug');
 //End nhúng pug
 
+//Nhúng folder public
+app.use(express.static('public'));
+//End nhúng folder public
+
 routeClient(app);
 
 app.listen(port, () => {
