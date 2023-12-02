@@ -25,9 +25,33 @@ export const detail = async (req: Request, res: Response): Promise<void> => {
       song["infoSinger"] = singer;
     }
   }
-  console.log(songs);
   res.render("client/pages/songs/list.pug", {
     pageTitle: topic.title,
     songs: songs
   });
+}
+
+//[GET] /songs/detail/:slug
+export const songDetail = async (req: Request, res: Response): Promise<void> => {
+  const song = await Song.findOne({
+    slug: req.params.slug,
+    deleted: false,
+    status: "active"
+  });
+
+  const singer = await Singer.findOne({
+    _id: song.singerId,
+    deleted: false
+  }).select("fullName");
+
+  const topic = await Topic.findOne({
+    _id: song.topicId
+  }).select("title");
+
+  res.render("client/pages/songs/detail.pug", {
+    pageTitle: song.title,
+    song: song,
+    topic: topic,
+    singer: singer
+  })
 }
