@@ -1,3 +1,4 @@
+//Song detail
 const aplayer = document.querySelector("#aplayer");
 if (aplayer) {
   let song = aplayer.getAttribute("data-song");
@@ -26,6 +27,7 @@ if (aplayer) {
     elementAvatar.style.animationPlayState = "paused";
   })
 }
+//End song deatil
 
 //Like
 const buttonLike = document.querySelectorAll("[button-like]");
@@ -55,3 +57,29 @@ if (buttonLike) {
   });
 }
 //End Like
+
+//Favorite
+const buttonFavorite = document.querySelectorAll("[button-favorite]");
+if (buttonFavorite) {
+  buttonFavorite.forEach(button => {
+    button.addEventListener("click", () => {
+      const songId = button.getAttribute("button-favorite");
+      let isFavorite = button.classList.contains("active");
+      const typeFavorite = isFavorite ? "unfavorite" : "favorite";
+
+      const link = `/songs/favorite/${typeFavorite}/${songId}`;
+      const options = {
+        method: "PATCH"
+      };
+
+      fetch(link, options)
+        .then(res => res.json())
+        .then((data) => {
+          if (data.code == 200) {
+            button.classList.toggle("active");
+          }
+        })
+    })
+  })
+}
+//End favorite

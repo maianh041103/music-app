@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Song from "../../model/song.model";
 import Topic from "../../model/topic.model";
 import Singer from "../../model/singer.model";
+import FavoriteSong from "../../model/favorite.model";
 
 //[GET] /songs/:slug
 export const detail = async (req: Request, res: Response): Promise<void> => {
@@ -48,11 +49,19 @@ export const songDetail = async (req: Request, res: Response): Promise<void> => 
     _id: song.topicId
   }).select("title");
 
+  const favoriteSong = await FavoriteSong.findOne({
+    songId: song.id,
+    //userId:user.id
+  });
+
+  let isFavorite = favoriteSong ? "active" : "";
+
   res.render("client/pages/songs/detail.pug", {
     pageTitle: song.title,
     song: song,
     topic: topic,
-    singer: singer
+    singer: singer,
+    isFavorite: isFavorite
   })
 }
 
@@ -80,5 +89,38 @@ export const like = async (req: Request, res: Response): Promise<void> => {
     res.json({
       code: 400
     })
+  }
+}
+
+//[PACTH] /songs/favorite/:typeFavorite/:songId
+export const favoriteSong = async (req: Request, res: Response) => {
+  try {
+    const typeFavorite: string = req.params.typeFavorite;
+    const songId: string = req.params.songId;
+    switch (typeFavorite) {
+      case "favorite":
+        const data = {
+          songId: songId
+        };
+        const favoriteSong = new FavoriteSong(data);
+        await favoriteSong.save();
+        break;
+      case "unfavorite":
+        await FavoriteSong.deleteOne({
+          songId: songId
+        });
+        break;
+      default:
+        break;
+    }
+    res.json({
+      code: 200,
+      message: "Thành công"
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Thất bại"
+    });
   }
 }
