@@ -15,9 +15,9 @@ block main
               <i class="fa-solid fa-microphone-lines"></i> #{singer.fullName}
             div(class="inner-action inner-topic")
               <i class="fa-solid fa-music"></i> #{topic.title}
-            div(class="inner-action inner-like" button-like=song.id)
+            div(class=`inner-action inner-like ${isLike}` button-like=song.id)
               <i class="fa-regular fa-thumbs-up"></i> 
-                <span>#{song.like} thích</span>
+                <span>#{song.like.length} thích</span>
             div(class=`inner-action inner-heart ${isFavorite}` button-favorite=song.id)
               <i class="fa-regular fa-heart"></i> Bài hát yêu thích
             

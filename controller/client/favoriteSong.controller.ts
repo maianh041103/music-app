@@ -5,8 +5,7 @@ import Singer from "../../model/singer.model";
 
 export const index = async (req: Request, res: Response) => {
   const listFavoriteSong = await FavoriteSong.find({
-    deleted: false,
-    //userId:user.id
+    userId: res.locals.account.id
   });
 
   let listSong = [];
@@ -20,6 +19,8 @@ export const index = async (req: Request, res: Response) => {
     });
     song["singerName"] = singer.fullName;
   }
+
+  console.log(listSong);
 
   res.render('client/pages/favorite-songs/index', {
     pageTitle: "Bài hát yêu thích",

@@ -51,17 +51,28 @@ export const songDetail = async (req: Request, res: Response): Promise<void> => 
 
   const favoriteSong = await FavoriteSong.findOne({
     songId: song.id,
-    //userId:user.id
+    userId: res.locals.account.id
   });
 
   let isFavorite = favoriteSong ? "active" : "";
+
+  let isLike = song.like.find(accountId => {
+    return accountId === res.locals.account.id;
+  });
+
+  if (isLike) {
+    isLike = "active";
+  } else {
+    isLike = "";
+  }
 
   res.render("client/pages/songs/detail.pug", {
     pageTitle: song.title,
     song: song,
     topic: topic,
     singer: singer,
-    isFavorite: isFavorite
+    isFavorite: isFavorite,
+    isLike: isLike
   })
 }
 
@@ -70,20 +81,35 @@ export const like = async (req: Request, res: Response): Promise<void> => {
   try {
     const typeLike: string = req.params.typeLike;
     const idSong: string = req.params.idSong;
+
+    if (typeLike == "like") {
+      const isLike = await Song.findOne({
+        _id: idSong,
+        like: res.locals.account.id
+      });
+      if (!isLike) {
+        await Song.updateOne({
+          _id: idSong
+        }, {
+          $push: { like: res.locals.account.id }
+        });
+      }
+    }
+    else {
+      await Song.updateOne({
+        _id: idSong
+      }, {
+        $pull: { like: res.locals.account.id }
+      });
+    }
+
     const song = await Song.findOne({
-      _id: idSong,
-      deleted: false,
-      status: "active"
-    });
-    let like = typeLike == "like" ? song.like + 1 : song.like - 1;
-    await Song.updateOne({
       _id: idSong
-    }, {
-      like: like
     });
+
     res.json({
       code: 200,
-      like: like
+      like: song.like.length
     });
   } catch (error) {
     res.json({
@@ -100,14 +126,16 @@ export const favoriteSong = async (req: Request, res: Response) => {
     switch (typeFavorite) {
       case "favorite":
         const data = {
-          songId: songId
+          songId: songId,
+          userId: res.locals.account.id
         };
         const favoriteSong = new FavoriteSong(data);
         await favoriteSong.save();
         break;
       case "unfavorite":
         await FavoriteSong.deleteOne({
-          songId: songId
+          songId: songId,
+          userId: res.locals.account.id
         });
         break;
       default:
