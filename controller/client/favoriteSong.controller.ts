@@ -19,7 +19,6 @@ export const index = async (req: Request, res: Response) => {
       _id: song.singerId
     });
     song["singerName"] = singer.fullName;
-    listSong.push(song);
   }
 
   res.render('client/pages/favorite-songs/index', {
