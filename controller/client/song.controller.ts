@@ -55,3 +55,30 @@ export const songDetail = async (req: Request, res: Response): Promise<void> => 
     singer: singer
   })
 }
+
+//[PATCH] /songs/like/:typeLike/:idSong
+export const like = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const typeLike: string = req.params.typeLike;
+    const idSong: string = req.params.idSong;
+    const song = await Song.findOne({
+      _id: idSong,
+      deleted: false,
+      status: "active"
+    });
+    let like = typeLike == "like" ? song.like + 1 : song.like - 1;
+    await Song.updateOne({
+      _id: idSong
+    }, {
+      like: like
+    });
+    res.json({
+      code: 200,
+      like: like
+    });
+  } catch (error) {
+    res.json({
+      code: 400
+    })
+  }
+}

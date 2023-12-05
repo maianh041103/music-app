@@ -7,4 +7,6 @@ route.get('/:slug', controller.detail);
 
 route.get('/detail/:slug', controller.songDetail);
 
+route.patch('/like/:typeLike/:idSong', controller.like);
+
 export const songRoutes: Router = route;

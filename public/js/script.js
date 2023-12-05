@@ -26,3 +26,32 @@ if (aplayer) {
     elementAvatar.style.animationPlayState = "paused";
   })
 }
+
+//Like
+const buttonLike = document.querySelectorAll("[button-like]");
+if (buttonLike) {
+  buttonLike.forEach(button => {
+    button.addEventListener("click", () => {
+      const songId = button.getAttribute("button-like");
+      const isActive = button.classList.contains("active");
+      let typeLike = isActive ? "dislike" : "like";
+
+      const link = `/songs/like/${typeLike}/${songId}`;
+
+      const options = {
+        method: "PATCH"
+      };
+
+      fetch(link, options)
+        .then(res => res.json())
+        .then((data) => {
+          if (data && data.code == 200) {
+            const span = button.querySelector("span");
+            span.innerHTML = data.like;
+            button.classList.toggle("active");
+          }
+        })
+    })
+  });
+}
+//End Like
