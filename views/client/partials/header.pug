@@ -33,3 +33,11 @@ header.header
               a(href="/topics") Chủ đề
             li
               a(href="/favorite-songs") Yêu thích
+            if(account)
+              li 
+                a(href="/accounts/logout") Đăng xuất
+            else
+              li
+                a(href="/accounts/register") Đăng ký
+              li
+                a(href="/accounts/login") Đăng nhập
