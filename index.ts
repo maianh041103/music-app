@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
 
 import routeClient from "./routes/client/index.route";
-import routeAdmin from "./routes/admin/index.route.route";
+import routeAdmin from "./routes/admin/index.route";
 import { systemConfig } from "./config/system";
 import path from "path";
 
@@ -18,10 +18,6 @@ const port: number | string = process.env.PORT || 3000;
 
 database.connect();
 
-//Nhúng biến gloabal
-app.locals.prefixAdmin = systemConfig.prefixAdmin;
-//End nhúng biến global
-
 //Nhúng tinymce
 app.use("/tinymce", express.static(path.join(__dirname, "node_modules", "tinymce")));
 //End nhúng tinymce
@@ -34,14 +30,18 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser());
 //End nhúng cookie-parse
 
+//Nhúng folder public
+app.use(express.static('public'));
+//End nhúng folder public
+
 //Nhúng pug
 app.set('views', './views');
 app.set('view engine', 'pug');
 //End nhúng pug
 
-//Nhúng folder public
-app.use(express.static('public'));
-//End nhúng folder public
+//Nhúng biến gloabal
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+//End nhúng biến global
 
 routeClient(app);
 routeAdmin(app);
