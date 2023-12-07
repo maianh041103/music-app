@@ -3,6 +3,6 @@ import * as controller from "../../controller/client/search.controller";
 
 const route: Router = express.Router();
 
-route.get('/result', controller.index);
+route.get('/:style', controller.index);
 
 export const searchRoutes = route;

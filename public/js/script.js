@@ -83,3 +83,44 @@ if (buttonFavorite) {
   })
 }
 //End favorite
+
+//Search
+const boxSearch = document.querySelector(".box-search");
+if (boxSearch) {
+  const input = boxSearch.querySelector("[name='keyword']");
+  const innerSuggest = boxSearch.querySelector(".inner-suggest");
+  input.addEventListener("keyup", (e) => {
+    const keyword = input.value;
+    const link = `/search/suggest?keyword=${keyword}`;
+    fetch(link)
+      .then(res => res.json())
+      .then(data => {
+        if (data.code == 200) {
+          if (data.songs && data.songs.length > 0) {
+            const innerList = boxSearch.querySelector(".inner-list");
+            let html = data.songs.map(song => {
+              return `
+                <a href="/songs/detail/${song.slug}" class="inner-item">
+                  <div class="inner-image">
+                    <img src="${song.avatar}">
+                  </div>
+                  <div class="inner-info">
+                    <div class="inner-title">${song.title}</div>
+                    <div class="inner-singer">
+                      <i class="fa-solid fa-microphone-lines"></i> ${song.infoSinger.fullName}
+                    </div>
+                  </div>
+                </a>`
+            });
+            html = html.join("");
+            console.log(html);
+            innerList.innerHTML = html;
+            innerSuggest.classList.add("show");
+          } else {
+            innerSuggest.classList.remove("show");
+          }
+        }
+      })
+  })
+}
+//End search
