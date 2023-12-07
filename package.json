@@ -17,6 +17,7 @@
     "md5": "^2.3.0",
     "mongoose": "^8.0.2",
     "pug": "^3.0.2",
+    "tinymce": "^6.8.1",
     "typescript": "^5.3.2",
     "unidecode": "^0.1.8"
   },

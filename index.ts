@@ -4,6 +4,9 @@ import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
 
 import routeClient from "./routes/client/index.route";
+import routeAdmin from "./routes/admin/index.route.route";
+import { systemConfig } from "./config/system";
+import path from "path";
 
 //Nhúng env
 import dotenv from "dotenv";
@@ -14,6 +17,14 @@ const app: Express = express();
 const port: number | string = process.env.PORT || 3000;
 
 database.connect();
+
+//Nhúng biến gloabal
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+//End nhúng biến global
+
+//Nhúng tinymce
+app.use("/tinymce", express.static(path.join(__dirname, "node_modules", "tinymce")));
+//End nhúng tinymce
 
 //Nhúng bodyParse
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -33,6 +44,7 @@ app.use(express.static('public'));
 //End nhúng folder public
 
 routeClient(app);
+routeAdmin(app);
 
 app.listen(port, () => {
   console.log("App listen on port : " + port);
