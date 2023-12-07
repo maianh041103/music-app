@@ -5,4 +5,6 @@ const route: Router = express.Router();
 
 route.get('/', controller.index);
 
+route.get('/create', controller.create);
+
 export const songRoutes = route;
