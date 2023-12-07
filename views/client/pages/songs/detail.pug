@@ -20,6 +20,8 @@ block main
                 <span>#{song.like.length} thích</span>
             div(class=`inner-action inner-heart ${isFavorite}` button-favorite=song.id)
               <i class="fa-regular fa-heart"></i> Bài hát yêu thích
+            div(class=`inner-action inner-listen` button-listen=song.id)
+              <i class="fa-solid fa-headphones"></i><span>#{song.listen} lượt nghe</span>
             
           .inner-play 
             .inner-avatar 

@@ -152,3 +152,35 @@ export const favoriteSong = async (req: Request, res: Response) => {
     });
   }
 }
+
+//[PATCH] /songs/listen/:songId
+export const listen = async (req: Request, res: Response) => {
+  try {
+    const songId: string = req.params.songId;
+    const song = await Song.findOne({
+      _id: songId
+    });
+    await Song.updateOne({
+      _id: songId
+    }, {
+      listen: (song.listen || 0) + 1
+    });
+
+    const newSong = await Song.findOne({
+      _id: songId
+    });
+
+    res.json({
+      code: 200,
+      message: "Thành công",
+      listen: newSong.listen
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: 400,
+      message: "Thất bại"
+    })
+  }
+
+}

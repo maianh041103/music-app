@@ -26,6 +26,24 @@ if (aplayer) {
   ap.on("pause", () => {
     elementAvatar.style.animationPlayState = "paused";
   })
+
+  ap.on("ended", () => {
+    const buttonListen = document.querySelector("[button-listen]");
+    const songId = buttonListen.getAttribute("button-listen");
+    const link = `/songs/listen/${songId}`;
+    const option = {
+      method: "PATCH"
+    }
+    fetch(link, option)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        if (data.code == 200) {
+          const span = buttonListen.querySelector("span");
+          span.innerHTML = data.listen + " lượt nghe";
+        }
+      })
+  })
 }
 //End song deatil
 
