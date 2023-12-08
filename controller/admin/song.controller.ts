@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Song from "../../model/song.model";
 import Topic from "../../model/topic.model";
 import Singer from "../../model/singer.model";
+import { systemConfig } from "../../config/system";
 
 //[GET] /admin/songs/
 export const index = async (req: Request, res: Response): Promise<void> => {
@@ -29,4 +30,25 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     topics: topics,
     singers: singers
   })
+}
+
+//[POST] /admin/songs/createPOST
+export const createPOST = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const data = {
+      title: req.body.title,
+      avatar: req.body.avatar,
+      description: req.body.description,
+      singerId: req.body.singerId,
+      topicId: req.body.topicId,
+      status: req.body.status,
+    }
+    const newSong = new Song(data);
+    await newSong.save();
+    res.redirect(`${systemConfig.prefixAdmin}/songs`);
+  }
+  catch (error) {
+    console.log("Thêm bài hát thất bại");
+    res.redirect(`${systemConfig.prefixAdmin}/songs`);
+  }
 }
