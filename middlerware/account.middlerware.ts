@@ -7,6 +7,9 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
       token: req.cookies.token
     });
     res.locals.account = account;
+    next();
   }
-  next();
+  else {
+    res.redirect("/accounts/login");
+  }
 }

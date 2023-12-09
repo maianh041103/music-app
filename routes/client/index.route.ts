@@ -7,11 +7,10 @@ import * as accountMidllerware from "../../middlerware/account.middlerware";
 import { Express } from "express";
 
 const routeClient = (app: Express): void => {
-  app.use(accountMidllerware.checkToken);
-  app.use("/topics", topicRoutes);
-  app.use("/songs", songRoutes);
-  app.use("/favorite-songs", favoriteSongRoutes);
-  app.use("/search", searchRoutes);
+  app.use("/topics", accountMidllerware.checkToken, topicRoutes);
+  app.use("/songs", accountMidllerware.checkToken, songRoutes);
+  app.use("/favorite-songs", accountMidllerware.checkToken, favoriteSongRoutes);
+  app.use("/search", accountMidllerware.checkToken, searchRoutes);
   app.use("/accounts", accountRoutes);
 }
 
