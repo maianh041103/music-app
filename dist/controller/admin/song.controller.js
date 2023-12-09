@@ -52,10 +52,10 @@ const createPOST = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             lyrics: req.body.lyrics
         };
         if (req.body.avatar) {
-            req.body["avatar"] = req.body.avatar[0];
+            data["avatar"] = req.body.avatar[0];
         }
         if (req.body.audio) {
-            req.body["audio"] = req.body.audio[0];
+            data["audio"] = req.body.audio[0];
         }
         const newSong = new song_model_1.default(data);
         yield newSong.save();

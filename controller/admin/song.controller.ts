@@ -44,10 +44,10 @@ export const createPOST = async (req: Request, res: Response): Promise<void> => 
       lyrics: req.body.lyrics
     }
     if (req.body.avatar) {
-      req.body["avatar"] = req.body.avatar[0];
+      data["avatar"] = req.body.avatar[0];
     }
     if (req.body.audio) {
-      req.body["audio"] = req.body.audio[0];
+      data["audio"] = req.body.audio[0];
     }
     const newSong = new Song(data);
     await newSong.save();
