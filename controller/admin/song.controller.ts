@@ -35,8 +35,6 @@ export const create = async (req: Request, res: Response): Promise<void> => {
 //[POST] /admin/songs/createPOST
 export const createPOST = async (req: Request, res: Response): Promise<void> => {
   try {
-    let avatar = "" || req.body.avatar[0];
-    let audio = "" || req.body.audio[0];
     const data = {
       title: req.body.title,
       description: req.body.description,
@@ -45,11 +43,11 @@ export const createPOST = async (req: Request, res: Response): Promise<void> => 
       status: req.body.status,
       lyrics: req.body.lyrics
     }
-    if (avatar) {
-      data["avatar"] = avatar;
+    if (req.body.avatar) {
+      req.body["avatar"] = req.body.avatar[0];
     }
-    if (audio) {
-      data["audio"] = audio;
+    if (req.body.audio) {
+      req.body["audio"] = req.body.audio[0];
     }
     const newSong = new Song(data);
     await newSong.save();
@@ -58,5 +56,61 @@ export const createPOST = async (req: Request, res: Response): Promise<void> => 
   catch (error) {
     console.log(error);
     res.redirect(`${systemConfig.prefixAdmin}/songs`);
+  }
+}
+
+//[GET] /admin/songs/edit/:id
+export const edit = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const song = await Song.findOne({
+      _id: req.params.id
+    });
+
+    const singers = await Singer.find({
+      deleted: false
+    });
+
+    const topics = await Topic.find({
+      deleted: false
+    });
+
+    res.render("admin/pages/songs/edit", {
+      pageTitle: "Chỉnh sửa bài hát",
+      dataSong: song,
+      singers: singers,
+      topics: topics
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("back");
+  }
+}
+
+//[PATCH] /admin/songs/edit/:id
+export const editPATCH = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const data = {
+      title: req.body.title,
+      description: req.body.description,
+      singerId: req.body.singerId,
+      topicId: req.body.topicId,
+      status: req.body.status,
+      lyrics: req.body.lyrics
+    }
+    if (req.body.avatar) {
+      req.body["avatar"] = req.body.avatar[0];
+    }
+    if (req.body.audio) {
+      req.body["audio"] = req.body.audio[0];
+    }
+    console.log(data);
+    const id = req.params.id;
+    await Song.updateOne({
+      _id: id
+    }, req.body);
+    res.redirect('back');
+  } catch (error) {
+    console.log(error);
+    res.redirect('back')
   }
 }

@@ -2,11 +2,12 @@ import express, { Express, Request, Response } from "express";
 import * as database from "./config/database";
 import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
+import path from "path";
+import methodOverride from "method-override";
 
 import routeClient from "./routes/client/index.route";
 import routeAdmin from "./routes/admin/index.route";
 import { systemConfig } from "./config/system";
-import path from "path";
 
 //Nhúng env
 import dotenv from "dotenv";
@@ -25,6 +26,10 @@ app.use("/tinymce", express.static(path.join(__dirname, "node_modules", "tinymce
 //Nhúng bodyParse
 app.use(bodyParser.urlencoded({ extended: false }))
 //End nhúng bodyParse
+
+//Nhúng methodOverride
+app.use(methodOverride('_method'));
+//Nhúng methodOverride
 
 //Nhúng cookie-parse
 app.use(cookieParser());
