@@ -35,14 +35,21 @@ export const create = async (req: Request, res: Response): Promise<void> => {
 //[POST] /admin/songs/createPOST
 export const createPOST = async (req: Request, res: Response): Promise<void> => {
   try {
+    let avatar = "" || req.body.avatar[0];
+    let audio = "" || req.body.audio[0];
     const data = {
       title: req.body.title,
-      avatar: req.body.avatar[0],
-      audio: req.body.audio[0],
       description: req.body.description,
       singerId: req.body.singerId,
       topicId: req.body.topicId,
       status: req.body.status,
+      lyrics: req.body.lyrics
+    }
+    if (avatar) {
+      data["avatar"] = avatar;
+    }
+    if (audio) {
+      data["audio"] = audio;
     }
     const newSong = new Song(data);
     await newSong.save();
