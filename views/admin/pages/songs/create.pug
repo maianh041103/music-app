@@ -59,6 +59,25 @@ block main
         class="image-preview"
         upload-image-preview
       )
+    div(
+      class="form-group"
+      upload-audio 
+      enctype="multipart/form-data"
+    )
+      label(for="audio") Audio 
+      input(
+        type="file"
+        class="form-control-file"
+        id="audio"
+        name="audio"
+        accept="audio/*"
+        upload-audio-input
+      )
+      audio(
+        src=""
+        class="audio-preview"
+        upload-audio-preview
+      )
     div(class="form-group")
       label(for="desc") Mô tả
       textarea(

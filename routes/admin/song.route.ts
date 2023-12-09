@@ -11,6 +11,9 @@ route.get('/', controller.index);
 
 route.get('/create', controller.create);
 
-route.post('/create', upload.single("avatar"), uploadClound.uploadSingle, controller.createPOST);
+route.post('/create', upload.fields([
+  { name: 'avatar', maxCount: 1 },
+  { name: 'audio', maxCount: 1 }]),
+  uploadClound.uploadFields, controller.createPOST);
 
 export const songRoutes = route;

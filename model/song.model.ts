@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import slug from "mongoose-slug-updater";
-import { title } from "process";
+
+mongoose.plugin(slug);
 
 const songSchema = new mongoose.Schema({
   title: String,

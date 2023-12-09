@@ -37,7 +37,8 @@ export const createPOST = async (req: Request, res: Response): Promise<void> => 
   try {
     const data = {
       title: req.body.title,
-      avatar: req.body.avatar,
+      avatar: req.body.avatar[0],
+      audio: req.body.audio[0],
       description: req.body.description,
       singerId: req.body.singerId,
       topicId: req.body.topicId,
@@ -48,7 +49,7 @@ export const createPOST = async (req: Request, res: Response): Promise<void> => 
     res.redirect(`${systemConfig.prefixAdmin}/songs`);
   }
   catch (error) {
-    console.log("Thêm bài hát thất bại");
+    console.log(error);
     res.redirect(`${systemConfig.prefixAdmin}/songs`);
   }
 }
