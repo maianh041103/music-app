@@ -74,10 +74,12 @@ block main
         upload-audio-input
       )
       audio(
-        src=""
+        controls
         class="audio-preview"
         upload-audio-preview
       )
+        source(src="", type="")
+
     div(class="form-group")
       label(for="desc") Mô tả
       textarea(
